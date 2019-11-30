@@ -1,0 +1,290 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head><title>Set - online card game</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta property="og:image" content="http://smart-games.org/images/set_cards.png" />
+    <link rel="stylesheet" type="text/css" href="/css/main.css?ver=20120302" />
+    <link rel="stylesheet" type="text/css" href="/css/layout.css?ver=20120302" />
+    <script type="text/javascript" src="/index.js"></script>
+            
+<script type="text/javascript">
+$(document).ready(function() {
+	var key_map = {
+		'81': [0,0], '87': [0, 1], '69': [0,2], '82': [0, 3], '84': [0,4], '89': [0, 5], '85': [0, 6],
+		'65': [1,0], '83': [1, 1], '68': [1,2], '70': [1, 3], '71': [1,4], '72': [1, 5], '74': [1, 6],
+		'90': [2,0], '88': [2, 1], '67': [2,2], '86': [2, 3], '66': [2,4], '78': [2, 5], '77': [2, 6]
+	};
+	$(window).keydown(function(event){
+		if (event.keyCode == '51') {
+			var url = $('#add_cards').attr('href');
+			if (url) {
+				location.href = url;
+			}
+		}
+		if (event.keyCode in key_map) {
+			$('#board tr:eq(' +key_map[event.keyCode][0] + 
+					') td:eq(' + key_map[event.keyCode][1] +')').trigger('click');
+		}
+	});
+	$("#board td").click(function () {
+		$("td.find").removeClass('find');
+		if ($(this).hasClass('selected')) {
+			$(this).removeClass('selected');
+			$('[name=card['+$(this).attr('id')+']]').val('0');
+		} else {
+			$('[name=card['+$(this).attr('id')+']]').val('1');
+			$(this).addClass('selected');
+		}
+		if ($("td.selected").length == 3) {
+			$("#set_form").submit();
+		}
+	});
+	$("#duration").everyTime(1000, function(i) {
+	
+		$(this).text(i+21);
+	});
+	
+});
+</script>
+
+      </head>
+<body>
+<div id="main">
+    <div id="cap">
+        <div class="top_header">
+            <div class="right">
+                <div class="right" id="flag_container">
+                    <div id="flagRu"><a href="/ru/"><img src="/images/flag_ru.gif" alt="ru" /></a></div>
+                    <div id="flagEn"><a href="/en/"><img src="/images/flag_en.gif" alt="en" /></a></div>
+                </div>
+                <div class="right"><a href="/en/main"><img src="/images/smart_games.png" alt="url logo" /></a></div>
+            </div>
+        </div>
+
+        <div id="centerMenu">
+            
+            <div id="setCards">
+                                <img src="/images/set_cards.png" alt="logo" />
+            </div>
+        </div>
+    </div>
+
+    <div id="content">
+<div id="menu">
+<div class="buttonwrapper">
+<a class="boldbuttons fixed" href="/en/set/start"><span>New Game</span></a>
+	<a id="add_cards" class="boldbuttons fixed" href="/en/set/open_cards"><span>Open 3 Cards</span></a>
+<a class="boldbuttons fixed" href="/en/set/find_set"><span>Find Set</span></a>
+</div>
+<p>
+<span>Cards in deck:</span> 69<p>
+
+Game duration: <span id="duration">21</span> sec<p>
+Sets found: 0<p>
+Score: 0<p>
+Last set:
+
+
+</div>
+    
+<form method="post" name="set_form" id="set_form" action="/en/set/submit_set">
+	<table id="board" border="0" class="">
+
+        <tr>
+            
+            <td class="card" id="0">
+    <input type="hidden" name="card[0]" value="0" />
+
+    	    	<img class="card_sign" src="/images/squiggle_solid_blue.png"
+    		alt="squiggle solid blue 1 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="1">
+    <input type="hidden" name="card[1]" value="0" />
+
+    	    	<img class="card_sign" src="/images/squiggle_striped_blue.png"
+    		alt="squiggle striped blue 3 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/squiggle_striped_blue.png"
+    		alt="squiggle striped blue 3 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/squiggle_striped_blue.png"
+    		alt="squiggle striped blue 3 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="2">
+    <input type="hidden" name="card[2]" value="0" />
+
+    	    	<img class="card_sign" src="/images/oval_solid_blue.png"
+    		alt="oval solid blue 3 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/oval_solid_blue.png"
+    		alt="oval solid blue 3 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/oval_solid_blue.png"
+    		alt="oval solid blue 3 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="3">
+    <input type="hidden" name="card[3]" value="0" />
+
+    	    	<img class="card_sign" src="/images/squiggle_open_blue.png"
+    		alt="squiggle open blue 2 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/squiggle_open_blue.png"
+    		alt="squiggle open blue 2 "/>
+    	<br />
+    	    </td>
+            </tr>
+            <tr>
+            
+            <td class="card" id="4">
+    <input type="hidden" name="card[4]" value="0" />
+
+    	    	<img class="card_sign" src="/images/oval_striped_green.png"
+    		alt="oval striped green 2 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/oval_striped_green.png"
+    		alt="oval striped green 2 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="5">
+    <input type="hidden" name="card[5]" value="0" />
+
+    	    	<img class="card_sign" src="/images/oval_solid_red.png"
+    		alt="oval solid red 2 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/oval_solid_red.png"
+    		alt="oval solid red 2 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="6">
+    <input type="hidden" name="card[6]" value="0" />
+
+    	    	<img class="card_sign" src="/images/diamond_striped_green.png"
+    		alt="diamond striped green 3 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/diamond_striped_green.png"
+    		alt="diamond striped green 3 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/diamond_striped_green.png"
+    		alt="diamond striped green 3 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="7">
+    <input type="hidden" name="card[7]" value="0" />
+
+    	    	<img class="card_sign" src="/images/diamond_striped_red.png"
+    		alt="diamond striped red 2 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/diamond_striped_red.png"
+    		alt="diamond striped red 2 "/>
+    	<br />
+    	    </td>
+            </tr>
+            <tr>
+            
+            <td class="card" id="8">
+    <input type="hidden" name="card[8]" value="0" />
+
+    	    	<img class="card_sign" src="/images/diamond_striped_blue.png"
+    		alt="diamond striped blue 2 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/diamond_striped_blue.png"
+    		alt="diamond striped blue 2 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="9">
+    <input type="hidden" name="card[9]" value="0" />
+
+    	    	<img class="card_sign" src="/images/diamond_solid_green.png"
+    		alt="diamond solid green 1 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="10">
+    <input type="hidden" name="card[10]" value="0" />
+
+    	    	<img class="card_sign" src="/images/diamond_solid_green.png"
+    		alt="diamond solid green 2 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/diamond_solid_green.png"
+    		alt="diamond solid green 2 "/>
+    	<br />
+    	    </td>
+                    
+            <td class="card" id="11">
+    <input type="hidden" name="card[11]" value="0" />
+
+    	    	<img class="card_sign" src="/images/diamond_solid_blue.png"
+    		alt="diamond solid blue 2 "/>
+    	<br />
+    	    	<img class="card_sign" src="/images/diamond_solid_blue.png"
+    		alt="diamond solid blue 2 "/>
+    	<br />
+    	    </td>
+            </tr>
+    </table>
+
+
+</form>
+<div style="clear: both"></div></div>
+</div>
+
+<div class="counters">
+    
+    <!--LiveInternet counter--><script type="text/javascript">
+    document.write("<a href='//www.liveinternet.ru/click' "+
+    "target=_blank><img src='//counter.yadro.ru/hit?t26.11;r"+
+    escape(document.referrer)+((typeof(screen)=="undefined")?"":
+    ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+    screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+    ";"+Math.random()+
+    "' alt='' title='LiveInternet: number of visitors for today is"+
+    " shown' "+
+    "border='0' width='88' height='15'><\/a>")
+    </script><!--/LiveInternet-->
+    
+    <script type="text/javascript" src="/js/orphus/en-orphus.js"></script>
+	<a href="http://orphus.ru" id="orphus" target="_blank"><img alt="Orphus system" src="/images/orphus.gif" border="0" width="80" height="15" /></a>
+	
+	<!-- Yandex.Metrika counter -->
+	<div style="display:none;"><script type="text/javascript">
+	(function(w, c) {
+	    (w[c] = w[c] || []).push(function() {
+	        try {
+	            w.yaCounter10183648 = new Ya.Metrika({id:10183648, enableAll: true});
+	        }
+	        catch(e) { }
+	    });
+	})(window, "yandex_metrika_callbacks");
+	</script></div>
+	<script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript" defer="defer"></script>
+	<noscript><div><img src="//mc.yandex.ru/watch/10183648" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+	<!-- /Yandex.Metrika counter -->
+	
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-28979051-1']);
+	  _gaq.push(['_trackPageview']);
+	
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	
+	</script>
+	
+</div>
+
+</body>
+</html>
