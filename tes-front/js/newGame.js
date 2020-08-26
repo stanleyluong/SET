@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", main)
 function main(){
     fetchCards()
     pageButtons()
-    fetchGames()
+    // fetchGames()
 }
 
 function newGame(e){
@@ -52,30 +52,23 @@ function initialRandomCards(cards, currentCards, usedCards){
         let image = document.createElement("img")
         image.src = card[0].img
         image.id = card[0].id
-        image.setAttribute("class", ".col-sm")
+        image.setAttribute("class", "img")
         image.onclick = e => {
             if (!selected.includes(card[0])){
-                image.style.border="5px solid green"
+                // image.style.border="1px dotted red"
+                image.style.backgroundColor="red"
                 selected.push(card[0])
                 console.log(selected.length)
                 threeClicks(selected, cards, currentCards, usedCards)
             } else {
-                image.style.border=null
+                image.style.backgroundColor=null
                 selected = selected.filter(c => c !== card[0])
                 console.log(selected)
             }
-                
-            
         }
         cardTable.appendChild(image)
     })
-    
-    if (document.getElementById("moreButton") == null){
-        let moreCardsButton = document.createElement("button")
-        moreCardsButton.id = "moreButton"
-        moreCardsButton.textContent = "More Cards"
-        let gameMenu = document.getElementById("menu")
-        gameMenu.appendChild(moreCardsButton)
+        let moreCardsButton = document.getElementById("moreCards")
         moreCardsButton.onclick = () => {
             if (cards.length > 0){
                 for (i=0; i<3; i++){
@@ -91,7 +84,6 @@ function initialRandomCards(cards, currentCards, usedCards){
             console.log("cards remaining in deck", cards.length)
             initialRandomCards(cards, currentCards, usedCards)
         }
-    }
 }
 
 function threeClicks(selected, cards, currentCards, usedCards){
@@ -109,12 +101,6 @@ function determineValid(selected, cards, currentCards, usedCards){
     let shapeValid = null
     let shadingValid = null
     let colorValid = null
-
-    // const properties = ['number', 'shape', 'shading', 'color']
-    // for (const property in properties) {
-    //     a[property] == b[property] && b[property] == c[property]
-    // }
-
     if (!((a.number == b.number) && (b.number == c.number) ||
             (a.number != b.number) && (a.number != c.number) && (b.number != c.number))) {
         numberValid = false;
@@ -237,11 +223,11 @@ function statsScores(games){
     //too tired to find the corresponding players right now
 }
     
-function fetchGames(){
-    fetch("http://localhost:3000/games")
-    .then(response => response.json())
-    .then(games => statsScores(games))
-}
+// function fetchGames(){
+//     fetch("http://localhost:3000/games")
+//     .then(response => response.json())
+//     .then(games => statsScores(games))
+// }
 
 function statsScores(games){
     // console.log(games)
@@ -252,86 +238,21 @@ function statsScores(games){
     .slice(0, 10);
     // console.log(highScores)
     highScores
-    //too tired to find the corresponding players right now
 }
 
 
 function pageButtons(){
     let gameMenu = document.getElementById("menu")
     let newButton = document.getElementById("newGame")
-
-
-    newButton.innerText = "New Game!"
+    newButton.innerText = "Reset"
     newButton.addEventListener("click", e => {
-        newGame(e)
+        // newGame(e)
+        main()
     })
 
-    ///STATS MODAL
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
-    var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // When the user clicks the button, open the modal 
-    btn.onclick = function() {
-    modal.style.display = "block";
-    }
-
-    //What is in the modal
-    var content = document.getElementById("modal-header")
-    // content.innerText= statsScores()
-    //figure out how to show this in text
-
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
-    modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-    }
 } 
 
 
-////USER MODAL
-    // Get the modal
-//     var modal = document.getElementById("myModal");
-
-//     // Get the button that opens the modal
-//     var btn = document.getElementById("myBtn");
-
-//     // Get the <span> element that closes the modal
-//     var span = document.getElementsByClassName("close")[0];
-
-//     // When the user clicks the button, open the modal 
-//     btn.onclick = function() {
-//     modal.style.display = "block";
-//     }
-
-//     //What is in the modal
-//     var content = document.getElementById("modal-header")
-//     // content.innerText= statsScores()
-//     //figure out how to show this in text
-
-//     // When the user clicks on <span> (x), close the modal
-//     span.onclick = function() {
-//     modal.style.display = "none";
-//     }
-
-//     // When the user clicks anywhere outside of the modal, close it
-//     window.onclick = function(event) {
-//         if (event.target == modal) {
-//           modal.style.display = "none";
-//         }
-//     }
-// } 
 
 
 
