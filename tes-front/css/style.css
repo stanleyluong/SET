@@ -1,9 +1,21 @@
 body {
   background-color: yellow;
 }
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+}
 
-h1 {
+.menu-item {
+  /* width: 20%;
+  height: auto; */
+  margin: auto;
+  display: inline;
+}
+
+strong {
   color: red;
+  font-size: 2rem;
 }
 
 #container {
@@ -18,25 +30,105 @@ h1 {
   width: 16.66666667%;
   /* height: auto; */
 }
-
-#found {
-  transform: scale(.1)
+.sets {
+  display: inline-block;
+  /* height: 37px; */
+}
+.set {
+  padding: 1%;
+  border: 2px solid red;
+  /* width: 5%; */
+  display: inline-block;
+  /* margin: auto; */
 }
 
-@media only screen and (max-width: 960px){
+/* #stopWatch {  */
+  /* width: 280px;  */
+  /* height: auto;  */
+  /* text-align: center; 
+  display: block; 
+  padding: 5px; 
+  margin: 0 auto;  */
+/* }  */
+
+/* #timer, #fulltime { 
+  width: auto; 
+  height: auto; 
+  padding: 10px; 
+  font-weight: bold; 
+  font-family: tahoma; 
+  display: block; 
+  border: 1px solid #eee; 
+  text-align: center; 
+  box-shadow: 0 0 5px #ccc; 
+  background: #fbfbf0; 
+  color: darkblue; 
+  border-bottom:4px solid darkgrey; 
+}  */
+
+button { 
+  cursor: pointer; 
+  font-weight: 700; 
+} 
+
+/* #fulltime { 
+  display:none; 
+  font-size:16px; 
+  font-weight:bold;
+}  */
+
+
+.found-img {
+  width: 1.5rem;
+  /* height: 10%; */
+}
+
+@media only screen and (max-width: 700px){
   .img {
     width: 20%;
   }
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 530px) {
   .img {
     width: 25%;
   }
 }
 
-@media only screen and (max-width: 430px){
+@media only screen and (max-width: 330px){
   .img {
     width: 33.33%;
   }
+}
+
+@media only screen and (max-height: 650px){
+  h1 {
+    font-size: 1.75em;
+  }
+}
+
+@keyframes    firework-animation {
+  0% {background-color : #ff8426;}
+  25% {background-color : #fffc84;}
+  50% {background-color : #ff83f4;}
+  75% {background-color : #83b6ff;}
+  100% {background-color : #ff8426;}
+}
+@-webkit-keyframes firework-animation {
+  0% {background-color : #ff8426;}
+  25% {background-color : #fffc84;}
+  50% {background-color : #ff83f4;}
+  75% {background-color : #83b6ff;}
+  100% {background-color : #ff8426;}
+}
+.fireWorkParticle {
+  z-index : 999;
+  position: absolute;
+  height : 5px;
+  width : 5px;
+  border-radius : 5px;
+  animation-name : firework-animation;
+  animation-timing-function : linear;
+  animation-duration : 1s;
+  animation-iteration-count : infinite;
 }

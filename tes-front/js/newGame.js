@@ -7,6 +7,7 @@ function main(){
 }
 
 function newGame(e){
+
     e.preventDefault();
     fetchCards()
     fetch("http://localhost:3000/games" , {
@@ -32,21 +33,27 @@ function deckOfCards(cards, currentCards, usedCards){
 }
 
 function initialRandomCards(cards, currentCards, usedCards){
+    console.log('cards',cards.length,'currentCards',currentCards.length,'usedCards',usedCards.length*3)
+    // if(cards.length===0){
+    //     console.log(currentCards,'currentcards')
+    // }
     while (document.getElementById("container").hasChildNodes()){
         document.getElementById("container").removeChild(document.getElementById("container").lastChild)
     }
     let cardTable = document.getElementById("container")
     let selected = []
-     console.log(usedCards)
+    //  console.log(usedCards)
     if (cards.length > 0){
         while (currentCards.length < 12){
             let randomNumber = Math.floor(Math.random() * (cards.length))
             let card = cards.splice(randomNumber,1)
+            console.log('adding card to current cards',card)
             currentCards.push(card)
         } 
-    } else { 
-        alert("There are no more cards in the deck!")
-    }
+    } 
+    // else { 
+    //     alert("There are no more cards in the deck!")
+    // }
     
     currentCards.forEach(card => {
         let image = document.createElement("img")
@@ -54,9 +61,11 @@ function initialRandomCards(cards, currentCards, usedCards){
         image.id = card[0].id
         image.setAttribute("class", "img")
         image.onclick = e => {
+            image.style.backgroundColor="red"
+                
             if (!selected.includes(card[0])){
                 // image.style.border="1px dotted red"
-                image.style.backgroundColor="red"
+                // image.style.backgroundColor="red"
                 selected.push(card[0])
                 console.log(selected.length)
                 threeClicks(selected, cards, currentCards, usedCards)
@@ -76,12 +85,14 @@ function initialRandomCards(cards, currentCards, usedCards){
                 let card = cards.splice(randomNumber,1)
                 currentCards.push(card)
                 }
+            // console.log("cards remaining in deck", cards.length)
             } else {
                 alert("There are no more cards in the deck!")
                 console.log("cards remaining in deck", cards)
             }
             console.log("cards on table", currentCards.length)
             console.log("cards remaining in deck", cards.length)
+            console.log("used cards",usedCards.length*3)
             initialRandomCards(cards, currentCards, usedCards)
         }
 }
@@ -106,7 +117,7 @@ function determineValid(selected, cards, currentCards, usedCards){
         numberValid = false;
     } else {
         numberValid = true
-        console.log(numberValid)
+        // console.log(numberValid)
     }     
     if (!((a.shape == b.shape) && (b.shape == c.shape) ||
             (a.shape != b.shape) && (a.shape != c.shape) && (b.shape != c.shape))) {
@@ -136,56 +147,40 @@ function determineValid(selected, cards, currentCards, usedCards){
 }
 
 function submitAttempt(valid, selected, cards, currentCards, usedCards, results){
+    // console.log('currentCards',currentCards.length)
+    // console.log('cards',cards.length)
+    // console.log('usedCards',usedCards.length*3)
+    let sets = document.getElementById('sets')
+
     if (valid === true){
-        cardToBeRemoved_1 = document.getElementById(selected[0].id)
-        cardToBeRemoved_2 = document.getElementById(selected[1].id)
-        cardToBeRemoved_3 = document.getElementById(selected[2].id)
-        cardToBeRemoved_1.remove()
-        cardToBeRemoved_2.remove()
-        cardToBeRemoved_3.remove()
-        for (x=0; x<selected.length; x++){
-            for (y=0; y<currentCards.length; y++) {
-                if (selected[x].id == currentCards[y][0].id){
-                    currentCards.splice(y, 1)
+        let set = document.createElement('div')
+        set.className = "set"
+        for(i=0;i<selected.length;i++){
+            let image = document.createElement('img')
+            image.src = selected[i].img
+            image.className = "found-img"
+            set.appendChild(image)
+            // for (x=0; x<selected.length; x++){
+                for (y=0; y<currentCards.length; y++) {
+                    if (selected[i].id == currentCards[y][0].id){
+                        if(currentCards.length===12){
+                            let randomNumber = Math.floor(Math.random() * (cards.length))
+                            let card = cards.splice(randomNumber,1)
+                            currentCards.splice(y, 1, card)
+                        } else {
+                            currentCards.splice(y,1)
+                            let lastCard = currentCards.splice(currentCards.length-1,1)
+                            // console.log('rearranging last card',lastCard[0])
+                            currentCards.splice(y-1, 0, lastCard[0])
+                        }
+                    }
                 }
-            }
+            // }
+            sets.appendChild(set)
         }
         
         usedCards.push(selected)
-        
-        console.log(usedCards)
-        if (document.getElementById("foundButton") == null){
-            foundButton = document.createElement("button")
-            foundButton.id = "foundButton"
-            let gameMenu = document.getElementById("menu")
-            gameMenu.appendChild(foundButton)
-            foundButton.textContent = "Show Found Sets"
-            foundButton.value = false
-            console.log(foundButton.value)
-            setsFound = document.getElementById("found")
-            foundButton.onclick = () => {
-                if(foundButton.textContent == "Show Found Sets"){
-                    foundButton.textContent = "Hide Found Sets"
-                    while (setsFound.hasChildNodes()){
-                    setsFound.removeChild(setsFound.lastChild)
-                    }
-                    usedCards.forEach(innerArray=> {
-                        console.log(innerArray)
-                        innerArray.forEach(c=> {
-                            console.log(c)
-                            let img = document.createElement("img")
-                            img.src = c.img
-                            setsFound.appendChild(img)
-                        })    
-                    })
-                } else if (foundButton.textContent = "Hide Found Sets"){
-                    foundButton.textContent = "Show Found Sets"
-                    while (setsFound.hasChildNodes()){
-                        setsFound.removeChild(setsFound.lastChild)
-                        }
-                }
-            }
-        }
+        console.log('usedCards',usedCards.length*3)
         selected = []
         initialRandomCards(cards, currentCards, usedCards)
     } else {
@@ -194,6 +189,84 @@ function submitAttempt(valid, selected, cards, currentCards, usedCards, results)
         initialRandomCards(cards, currentCards, usedCards)
     }
 }
+var clear; function stopWatch( ) { 
+    // javascript statement here 
+    clear = setTimeout( "stopWatch( )", 1000 ); 
+} 
+// initialize your variables outside the function 
+var count = 0; var clearTime; var seconds = 0, minutes = 0, hours = 0; 
+var clearState; var secs, mins, gethours ; 
+function startWatch( ) { 
+    /* check if seconds is equal to 60 and add a +1 to minutes, and set seconds to 0 */ 
+    if ( seconds === 60 ) { seconds = 0; minutes = minutes + 1; } 
+    /* you use the javascript tenary operator to format how the minutes should look and add 0 to minutes if less than 10 */ 
+    mins = ( minutes < 10 ) ? ( '0' + minutes + ': ' ) : ( minutes + ': ' ); 
+    /* check if minutes is equal to 60 and add a +1 to hours set minutes to 0 */ 
+    if ( minutes === 60 ) { minutes = 0; hours = hours + 1; } 
+    /* you use the javascript tenary operator to format how the hours should look and add 0 to hours if less than 10 */ 
+    gethours = ( hours < 10 ) ? ( '0' + hours + ': ' ) : ( hours + ': ' ); secs = ( seconds < 10 ) ? ( '0' + seconds ) : ( seconds );
+     // display the stopwatch 
+     var x = document .getElementById("timer"); 
+     x.innerHTML = 'Time: ' + gethours + mins + secs;
+      /* call the seconds counter after displaying the stop watch and increment seconds by +1 to keep it counting */ 
+      seconds++; 
+      /* call the setTimeout( ) to keep the stop watch alive ! */ 
+      clearTime = setTimeout( "startWatch( )", 1000 ); 
+    } 
+    // startWatch( ) 
+    //create a function to start the stop watch 
+function startTime( ) { 
+    /* check if seconds, minutes, and hours are equal to zero and start the stop watch */ 
+    if ( seconds === 0 && minutes === 0 && hours === 0 ) { 
+        /* hide the fulltime when the stop watch is running */ 
+        var fulltime = document.getElementById( "fulltime" );
+         fulltime.style.display = "none";
+          /* hide the start button if the stop watch is running */ 
+          this.style.display = "none"; 
+          /* call the startWatch( ) function to execute the stop watch whenever the startTime( ) is triggered */ 
+          startWatch( ); 
+        } 
+        // if () 
+    } // startTime() 
+        /* you need to bind the startTime( ) function to any event type to keep the stop watch alive ! */
+         window.addEventListener( 'load', function ( ) {
+              var start = document .getElementById("start"); start.addEventListener( 'click', startTime ); 
+            }); 
+            // startwatch.js end 
+function stopTime( ) {
+    if ( seconds !== 0 || minutes !== 0 || hours !== 0 ) { 
+        /* display the full time before reseting the stop watch */ 
+        var fulltime = document .getElementById( "fulltime" ); 
+        //display the full time 
+        fulltime.style.display = "inline"; 
+        fulltime.className = "menu-item"
+        var time = gethours + mins + secs; 
+        fulltime.innerHTML = 'Fulltime: ' + time; 
+        // reset the stop watch
+        seconds = 0; minutes = 0; hours = 0; secs = '0' + seconds; mins = '0' + minutes + ': '; gethours = '0' + hours + ': '; 
+        /* display the stopwatch after it's been stopped */ 
+        var x = document.getElementById ("timer");
+        var stopTime = gethours + mins + secs; 
+        x.innerHTML = stopTime;
+        /* display all stop watch control buttons */
+        var showStart = document.getElementById ('start'); 
+        showStart.style.display = "inline"; 
+        var showStop = document.getElementById ("stop"); 
+        showStop.style.display = "inline";
+        /* clear the stop watch using the setTimeout( ) return value 'clearTime' as ID */
+        clearTimeout( clearTime ); 
+    }
+     // if () 
+} 
+    // stopTime() 
+    /* you need to call the stopTime( ) function to terminate the stop watch */ 
+window.addEventListener( 'load', function ( ) {
+    var stop = document.getElementById ("stop"); 
+    stop.addEventListener( 'click', stopTime ); 
+    }
+); 
+    // stopwatch.js end 
+
 
 function submitNewScore(totScore, results){
     console.log("the id of item to fetch")
@@ -242,14 +315,10 @@ function statsScores(games){
 
 
 function pageButtons(){
-    let gameMenu = document.getElementById("menu")
-    let newButton = document.getElementById("newGame")
-    newButton.innerText = "Reset"
-    newButton.addEventListener("click", e => {
-        // newGame(e)
-        main()
+    let newGameButton = document.getElementById("newGameButton")
+    newGameButton.addEventListener("click", e => {
+        location.reload()
     })
-
 } 
 
 

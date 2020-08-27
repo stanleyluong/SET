@@ -3,17 +3,30 @@
 		<title>SET by Stanley Luong</title>
     	<script type="text/javascript" src="js/newGame.js"></script>
 		<link rel="stylesheet" href='../tes-front/css/style.css'>
+		<link rel="icon" type="image/png" href="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQcbt2p0HDVf1V1M7xfmHGSymFIqJAquB06lg&usqp=CAU">
 	</head>
   	
 	<body>
-		<h1>SET by Stanley Luong</h1>
-		<div class="container">
+		<div class = "fireWorkParticle"></div>
+		<div id = "board">
 			<div id="menu">
-					<button type="button" id="newGame"></button>
-					<button type="button" id="moreCards">More Cards</button>
+				<strong class="menu-item">SET by Stanley Luong</strong>
+				<button type="button" id="newGameButton" class="menu-item">New Game</button>
+				<button type="button" id="moreCards" class="menu-item">More Cards</button>
+				<!-- <button type="button" id="showSetsButton">Show Sets</button> -->
+				<!-- <button type="button" id="timer"></button> -->
+				<span id="stopWatch" class="menu-item">
+					<span id="timer"> Time : 00:00:00 </span> 
+					<button id="start"> Start </button> 
+					<button id="stop"> Stop </button> 
+					<span id="fulltime"></span> 
+				</span>
 			</div>
+			<div id="container"></div>
+			<div id="sets"></div>
 		</div>
-		<div id="container"></div>
-		<div id="found"></div>
+
+		
+			
 	</body>
 </html>
