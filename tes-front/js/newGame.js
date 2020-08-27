@@ -6,8 +6,105 @@ function main(){
     // fetchGames()
 }
 
-function newGame(e){
+function k_combinations(set, k) {
+    var i, j, combs, head, tailcombs;
+    
+    // There is no way to take e.g. sets of 5 elements from
+    // a set of 4.
+    if (k > set.length || k <= 0) {
+        return [];
+    }
+    
+    // K-sized set has only one K-sized subset.
+    if (k == set.length) {
+        return [set];
+    }
+    
+    // There is N 1-sized subsets in a N-sized set.
+    if (k == 1) {
+        combs = [];
+        for (i = 0; i < set.length; i++) {
+            combs.push([set[i]]);
+        }
+        return combs;
+    }
+    
+    // Assert {1 < k < set.length}
+    
+    // Algorithm description:
+    // To get k-combinations of a set, we want to join each element
+    // with all (k-1)-combinations of the other elements. The set of
+    // these k-sized sets would be the desired result. However, as we
+    // represent sets with lists, we need to take duplicates into
+    // account. To avoid producing duplicates and also unnecessary
+    // computing, we use the following approach: each element i
+    // divides the list into three: the preceding elements, the
+    // current element i, and the subsequent elements. For the first
+    // element, the list of preceding elements is empty. For element i,
+    // we compute the (k-1)-computations of the subsequent elements,
+    // join each with the element i, and store the joined to the set of
+    // computed k-combinations. We do not need to take the preceding
+    // elements into account, because they have already been the i:th
+    // element so they are already computed and stored. When the length
+    // of the subsequent list drops below (k-1), we cannot find any
+    // (k-1)-combs, hence the upper limit for the iteration:
+    combs = [];
+    for (i = 0; i < set.length - k + 1; i++) {
+        // head is a list that includes only our current element.
+        head = set.slice(i, i + 1);
+        // We take smaller combinations from the subsequent elements
+        tailcombs = k_combinations(set.slice(i + 1), k - 1);
+        // For each (k-1)-combination we join it with the current
+        // and store it to the set of k-combinations.
+        for (j = 0; j < tailcombs.length; j++) {
+            combs.push(head.concat(tailcombs[j]));
+        }
+    }
+    return combs;
+}
 
+const valid = set => {
+    console.log(set)
+    let a = set[0][0]
+    let b = set[1][0]
+    let c = set[2][0]
+    let validity = null
+    let numberValid = null
+    let shapeValid = null
+    let shadingValid = null
+    let colorValid = null
+    if (!((a.number == b.number) && (b.number == c.number) ||
+            (a.number != b.number) && (a.number != c.number) && (b.number != c.number))) {
+        numberValid = false;
+    } else {
+        numberValid = true
+    }     
+    if (!((a.shape == b.shape) && (b.shape == c.shape) ||
+            (a.shape != b.shape) && (a.shape != c.shape) && (b.shape != c.shape))) {
+        shapeValid = false;
+    } else {
+        shapeValid = true
+    }
+    if (!((a.shading == b.shading) && (b.shading == c.shading) ||
+        (a.shading != b.shading) && (a.shading != c.shading) && (b.shading != c.shading))) {
+        shadingValid = false;
+    } else {
+        shadingValid = true
+    }
+    if (!((a.color == b.color) && (b.color == c.color) ||
+            (a.color != b.color) && (a.color != c.color) && (b.color != c.color))) {
+        colorValid = false;
+    } else {
+        colorValid = true
+    }
+    if ((numberValid == true) && (shapeValid == true) && (shadingValid == true) && (colorValid == true)) { 
+        validity = true
+        console.log(a,b,c)
+    }
+    return validity
+}
+
+function newGame(e){
     e.preventDefault();
     fetchCards()
     fetch("http://localhost:3000/games" , {
@@ -34,9 +131,6 @@ function deckOfCards(cards, currentCards, usedCards){
 
 function initialRandomCards(cards, currentCards, usedCards){
     console.log('cards',cards.length,'currentCards',currentCards.length,'usedCards',usedCards.length*3)
-    // if(cards.length===0){
-    //     console.log(currentCards,'currentcards')
-    // }
     while (document.getElementById("container").hasChildNodes()){
         document.getElementById("container").removeChild(document.getElementById("container").lastChild)
     }
@@ -47,14 +141,12 @@ function initialRandomCards(cards, currentCards, usedCards){
         while (currentCards.length < 12){
             let randomNumber = Math.floor(Math.random() * (cards.length))
             let card = cards.splice(randomNumber,1)
-            console.log('adding card to current cards',card)
+            // console.log('adding card to current cards',card)
             currentCards.push(card)
         } 
-    } 
-    // else { 
-    //     alert("There are no more cards in the deck!")
-    // }
-    
+    }
+    let combos = k_combinations(currentCards, 3)
+    console.log('some valid',combos.some(valid))
     currentCards.forEach(card => {
         let image = document.createElement("img")
         image.src = card[0].img
@@ -62,11 +154,8 @@ function initialRandomCards(cards, currentCards, usedCards){
         image.setAttribute("class", "img")
         image.onclick = e => {
             image.style.backgroundColor="red"
-                
-            if (!selected.includes(card[0])){
-                // image.style.border="1px dotted red"
-                // image.style.backgroundColor="red"
-                selected.push(card[0])
+            if (!selected.includes(card)){
+                selected.push(card)
                 console.log(selected.length)
                 threeClicks(selected, cards, currentCards, usedCards)
             } else {
@@ -85,7 +174,6 @@ function initialRandomCards(cards, currentCards, usedCards){
                 let card = cards.splice(randomNumber,1)
                 currentCards.push(card)
                 }
-            // console.log("cards remaining in deck", cards.length)
             } else {
                 alert("There are no more cards in the deck!")
                 console.log("cards remaining in deck", cards)
@@ -96,77 +184,33 @@ function initialRandomCards(cards, currentCards, usedCards){
             initialRandomCards(cards, currentCards, usedCards)
         }
 }
-
 function threeClicks(selected, cards, currentCards, usedCards){
+
     if (selected.length == 3) {
-        determineValid(selected, cards, currentCards, usedCards) 
+        submitAttempt(valid(selected), selected, cards, currentCards, usedCards) 
     }
 }
 
-function determineValid(selected, cards, currentCards, usedCards){
-    let a = selected[0]
-    let b = selected[1]
-    let c = selected[2]
-    let valid = null
-    let numberValid = null
-    let shapeValid = null
-    let shadingValid = null
-    let colorValid = null
-    if (!((a.number == b.number) && (b.number == c.number) ||
-            (a.number != b.number) && (a.number != c.number) && (b.number != c.number))) {
-        numberValid = false;
-    } else {
-        numberValid = true
-        // console.log(numberValid)
-    }     
-    if (!((a.shape == b.shape) && (b.shape == c.shape) ||
-            (a.shape != b.shape) && (a.shape != c.shape) && (b.shape != c.shape))) {
-        shapeValid = false;
-    } else {
-        shapeValid = true
-    }
-    if (!((a.shading == b.shading) && (b.shading == c.shading) ||
-        (a.shading != b.shading) && (a.shading != c.shading) && (b.shading != c.shading))) {
-        shadingValid = false;
-    } else {
-        shadingValid = true
-    }
-    if (!((a.color == b.color) && (b.color == c.color) ||
-            (a.color != b.color) && (a.color != c.color) && (b.color != c.color))) {
-        colorValid = false;
-    } else {
-        colorValid = true
-    }
-    if ((numberValid == true) && (shapeValid == true) && (shadingValid == true) && (colorValid == true)) { 
-        valid = true
-        console.log(valid)
-    } else {
-        alert("Invalid Set!")
-    }
-    submitAttempt(valid, selected, cards, currentCards, usedCards) 
-}
-
-function submitAttempt(valid, selected, cards, currentCards, usedCards, results){
-    // console.log('currentCards',currentCards.length)
-    // console.log('cards',cards.length)
-    // console.log('usedCards',usedCards.length*3)
+function submitAttempt(validity, selected, cards, currentCards, usedCards){
     let sets = document.getElementById('sets')
-
-    if (valid === true){
+    if (validity === true){
         let set = document.createElement('div')
         set.className = "set"
         for(i=0;i<selected.length;i++){
             let image = document.createElement('img')
-            image.src = selected[i].img
+            image.src = selected[i][0].img
             image.className = "found-img"
             set.appendChild(image)
-            // for (x=0; x<selected.length; x++){
                 for (y=0; y<currentCards.length; y++) {
-                    if (selected[i].id == currentCards[y][0].id){
-                        if(currentCards.length===12){
-                            let randomNumber = Math.floor(Math.random() * (cards.length))
-                            let card = cards.splice(randomNumber,1)
-                            currentCards.splice(y, 1, card)
+                    if (selected[i][0].id == currentCards[y][0].id){
+                        if(currentCards.length <= 12){
+                            if(cards.length>0){
+                                let randomNumber = Math.floor(Math.random() * (cards.length))
+                                let card = cards.splice(randomNumber,1)
+                                currentCards.splice(y, 1, card)
+                            } else {
+                                currentCards.splice(y, 1)
+                            }
                         } else {
                             currentCards.splice(y,1)
                             let lastCard = currentCards.splice(currentCards.length-1,1)
@@ -175,14 +219,16 @@ function submitAttempt(valid, selected, cards, currentCards, usedCards, results)
                         }
                     }
                 }
-            // }
             sets.appendChild(set)
         }
-        
         usedCards.push(selected)
-        console.log('usedCards',usedCards.length*3)
-        selected = []
-        initialRandomCards(cards, currentCards, usedCards)
+        let combos = k_combinations(currentCards, 3)
+        if(cards.length===0 && combos.some(valid)===false){
+            alert('Congratulations! There are no possible valid sets remaining.')
+            //trigger fireworks from here
+        } else {
+            initialRandomCards(cards, currentCards, usedCards)
+        }
     } else {
         selected = []
         console.log("failed validity")
