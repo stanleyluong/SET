@@ -118,11 +118,29 @@ function initialRandomCards(cards, currentCards, usedCards){
         }
         cardTable.appendChild(image)
     })
-    let images = document.getElementsByTagName("img")
+    let images = document.getElementsByClassName("img")
     let container = document.getElementById("container")
     console.log(images)
     console.log(currentCards.length)
     switch(currentCards.length){
+        case 3:
+            for(i=0;i<images.length;i++){
+                images[i].style.width = "25%"
+                container.style.width = "37%"
+            }   
+            break
+        case 6:
+            for(i=0;i<images.length;i++){
+                images[i].style.width = "25%"
+                container.style.width = "37%"
+            }   
+            break
+        case 9:
+            for(i=0;i<images.length;i++){
+                images[i].style.width = "25%"
+                container.style.width = "37%"
+            }   
+            break
         case 12:
             for(i=0;i<images.length;i++){
                 images[i].style.width = "25%"
