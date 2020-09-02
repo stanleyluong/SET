@@ -52,6 +52,10 @@ body {
 
 }
 
+.img:hover{
+  background-color: yellow;
+}
+
 #sets {
   display: flex;
   /* flex-wrap: wrap; */
@@ -60,7 +64,7 @@ body {
 
 .set {
   padding: 0.5%;
-  border: 2px solid red;
+  border: 2px solid greenyellow;
   width: 10%;
   /* display: inline-block; */
   background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);

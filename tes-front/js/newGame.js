@@ -105,7 +105,7 @@ function initialRandomCards(cards, currentCards, usedCards){
         image.id = card[0].id
         image.setAttribute("class", "img")
         image.onclick = e => {
-            image.style.backgroundColor="red"
+            image.style.backgroundColor="yellow"
             if (!selected.includes(card)){
                 selected.push(card)
                 console.log(selected.length)
