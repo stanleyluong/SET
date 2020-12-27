@@ -1,8 +1,10 @@
 document.addEventListener("DOMContentLoaded", main)
 
+
 function main(){
     fetchCards()
     pageButtons()
+    console.log(cards)
 }
 
 function k_combinations(set, k) {
@@ -72,12 +74,14 @@ const valid = set => {
 }
 
 function fetchCards(){
-    fetch("http://localhost:3000/cards")
-    .then(response => response.json())
-    .then(cards => initialRandomCards(cards, [], []))
+    // fetch("http://localhost:3000/cards")
+    // .then(response => response.json())
+    // .then(cards => initialRandomCards(cards, [], []))
+    console.log(cards)
+    initialRandomCards(cards,[],[])
 }
 
-function initialRandomCards(cards, currentCards, usedCards){
+async function initialRandomCards(cards, currentCards, usedCards){
     console.log('cards',cards.length,'currentCards',currentCards.length,'usedCards',usedCards.length*3)
     while (document.getElementById("container").hasChildNodes()){
         document.getElementById("container").removeChild(document.getElementById("container").lastChild)
@@ -101,7 +105,8 @@ function initialRandomCards(cards, currentCards, usedCards){
     console.log('some valid',combos.some(valid))
     currentCards.forEach(card => {
         let image = document.createElement("img")
-        image.src = card[0].img
+        const baseURL = "https://raw.githubusercontent.com/stanleyluong/SET/151b482e77d677f3b211f4e84ad0dc1cc74c688f/tes-backend/app/images/svg/icons/"
+        image.src = baseURL+card[0].img
         image.id = card[0].id
         image.setAttribute("class", "img")
         image.onclick = e => {
